@@ -2,7 +2,7 @@ const puppeteer = require('puppeteer');
 const { Client } = require('pg');
 
 const dbConfig = {
-  connectionString: 'postgresql://zerooitocincoadm:GrzYTKeT3ZmSg4JfpnVqUYSd@zerooitocincodb.c5qnvtxpcnuu.us-east-1.rds.amazonaws.com:5432/085db?schema=public',
+  connectionString: 'postgresql://root:Acquaint_Viewer7_Eloquent@elegebr.c5qnvtxpcnuu.us-east-1.rds.amazonaws.com:5432/elegebrqa',
   ssl: {
     rejectUnauthorized: false
   }
@@ -26,7 +26,7 @@ async function processPerson(person) {
       console.log('Pop-up de cookies fechado.');
     }
 
-    const formattedBirthDate = formatDate(person.birth_date);
+    const formattedBirthDate = formatDate(person.birthday);
 
     if (await page.$('#LV_NomeTituloCPF') !== null) {
       await page.type('#LV_NomeTituloCPF', person.name);
@@ -109,7 +109,7 @@ async function main() {
   if (result.status === 'success') {
     const { data, person } = result;
     await client.query(
-      'UPDATE public."People" SET zona_eleitoral = $1, secao_eleitoral = $2, local_votacao = $3, endereco_votacao = $4, municipio_votacao = $5, biometria = $6, preenchidorpa = true WHERE id = $7',
+      'UPDATE public."supporters" SET voting_zone = $1, session = $2, local_voting = $3, voting_address = $4, voting_municipal = $5, biometry = $6, rpa_filled = true WHERE id = $7',
       [parseInt(data.zona, 10), parseInt(data.secao, 10), data.local, data.endereco, data.municipio, data.biometria, person.id]
     );
   }
